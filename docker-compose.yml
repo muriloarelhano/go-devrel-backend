@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  backend:
+    image: go-devrel-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+      - 9229:9229
+      - 3100:8080
+    volumes:
+      - .:/app
+
+  backend-db:
+    image: postgres:latest 
+    ports:
+      - 5432:5432
+    volumes:
+      - "./postgres:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_DB: devrel-master
+      POSTGRES_USER: devrel
+      POSTGRES_PASSWORD: devrel

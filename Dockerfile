@@ -1,7 +1,9 @@
 FROM node:alpine
 
+WORKDIR /app
+
 COPY . .
 
-RUN npm install && rm -r src
+RUN npm install
 
-CMD [ "npm", "run start:dev" ]
+CMD npm run start:dev

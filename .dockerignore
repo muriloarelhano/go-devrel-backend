@@ -2,4 +2,8 @@
 docker-compose.yml
 LICENSE
 README.md
-.eslint
+.eslintrc.js
+.prettierrc
+node_modules
+test
+postgres
