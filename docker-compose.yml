@@ -12,6 +12,8 @@ services:
       - 3100:8080
     volumes:
       - .:/app
+    depends_on:
+      - backend-db
 
   backend-db:
     image: postgres:latest 
@@ -20,6 +22,6 @@ services:
     volumes:
       - "./postgres:/var/lib/postgresql/data"
     environment:
-      POSTGRES_DB: devrel-master
+      POSTGRES_DB: user
       POSTGRES_USER: devrel
       POSTGRES_PASSWORD: devrel
