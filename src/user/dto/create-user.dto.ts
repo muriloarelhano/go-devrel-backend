@@ -2,7 +2,7 @@ import {
   IsEmail,
   IsString,
   Length,
-  IsNotEmpty,
+  IsNotEmpty
 } from 'class-validator'
 
 export class CreateUserDto {
@@ -27,4 +27,5 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   last_name: string
+
 }

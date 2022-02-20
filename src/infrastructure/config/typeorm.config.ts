@@ -16,12 +16,12 @@ export class TypeOrmConfigOptions implements TypeOrmOptionsFactory {
     return {
       type: 'postgres',
       host: DB_HOST,
-      port: parseInt(DB_PORT),
+      port: parseInt(DB_PORT) || 5432,
       username: DB_USER,
       password: DB_PASS,
       database: DB_NAME,
-      migrations: [`${__dirname}/../**/*.migration{.ts,.js}`],
-      entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
+      migrations: [`${__dirname}/../../**/*.migration{.ts,.js}`],
+      entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
       synchronize: NODE_ENV == 'development' ? true : false,
     }
   }

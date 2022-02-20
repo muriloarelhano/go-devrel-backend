@@ -17,12 +17,8 @@ export class UserService {
     return this.userRepository.save(createUserDto)
   }
 
-  findAll() {
-    return this.userRepository.find()
-  }
-
-  findOne(id: string) {
-    return this.userRepository.findOne(id)
+  findOne(email: string) {
+    return this.userRepository.findOne({ where: { email: email } })
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

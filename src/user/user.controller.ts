@@ -9,17 +9,19 @@ import {
   ValidationPipe,
   UsePipes,
   UseFilters,
+  UseGuards,
+  Req,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { AllExceptionsFilter } from 'src/filters/generic-exception.filter'
+import { AllExceptionsFilter } from '../filters/generic-exception.filter'
+import { JwtAuthGuard } from '../authentication/guards/jwt.guard'
 
 @Controller('user')
 @UseFilters(new AllExceptionsFilter(UserController.name))
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @Post()
   @UsePipes(new ValidationPipe())
   create(@Body() createUserDto: CreateUserDto) {
@@ -27,22 +29,20 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll()
+  @UseGuards(JwtAuthGuard)
+  findOne(@Req() req: any) {
+    return this.userService.findOne(req.user.email)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id)
+  @Patch()
+  @UseGuards(JwtAuthGuard)
+  update(@Req() req: any, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(req.user.id, updateUserDto)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto)
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id)
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  remove(@Req() req: any) {
+    return this.userService.remove(req.user.id)
   }
 }

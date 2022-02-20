@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { TypeOrmConfigOptions } from './config/typeorm.config'
+import { TypeOrmConfigOptions } from './infrastructure/config/typeorm.config'
 import { UserModule } from './user/user.module'
+import { AuthenticationModule } from './authentication/authentication.module'
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { UserModule } from './user/user.module'
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigOptions,
     }),
+    AuthenticationModule,
     UserModule,
   ],
   controllers: [],

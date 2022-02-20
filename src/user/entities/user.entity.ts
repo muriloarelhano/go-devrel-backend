@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
+} from 'typeorm'
 
 @Entity({ name: 'user' })
 @Unique(['phone', 'email'])
@@ -20,4 +27,13 @@ export class User {
 
   @Column({ nullable: true })
   last_name: string
+
+  @Column({ nullable: true })
+  birthdate: Date
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }
