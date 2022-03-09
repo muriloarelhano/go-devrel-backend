@@ -3,14 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
   Delete,
   ValidationPipe,
   UsePipes,
   UseFilters,
   UseGuards,
   Req,
+  Put,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -34,10 +33,20 @@ export class UserController {
     return this.userService.findOne(req.user.email)
   }
 
-  @Patch()
+  @Put()
   @UseGuards(JwtAuthGuard)
   update(@Req() req: any, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto)
+  }
+
+  @Put('reset-password')
+  @UseGuards(JwtAuthGuard)
+  resetPassword(
+    @Req() req: any,
+    @Body('password') password: string,
+    @Body('newPassword') newPassword: string,
+  ) {
+    return this.userService.resetPassword(req.user.id, password, newPassword)
   }
 
   @Delete()
