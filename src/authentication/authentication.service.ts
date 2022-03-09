@@ -1,3 +1,4 @@
+import { ERROR_INVALID_CREDENTIALS } from 'src/constants';
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { UserService } from 'src/user/user.service'
 import { AuthenticationDto } from './dto/authentication.dto'
@@ -19,7 +20,7 @@ export class AuthenticationService {
 
   async login(body: AuthenticationDto) {
     const user = await this.validateUser(body.email, body.password)
-    if (!user) throw new BadRequestException('Usuário não encontrado')
+    if (!user) throw new BadRequestException(ERROR_INVALID_CREDENTIALS)
     const payload = { email: user.email, sub: user.id }
     return {
       id_token: this.jwtService.sign(payload),
