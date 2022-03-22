@@ -1,15 +1,22 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator'
 
 export class AuthenticationDto {
-    @IsNotEmpty()
-    @IsString()
-    @IsEmail()
-    email: string
+  @IsNotEmpty()
+  @IsString()
+  @IsEmail()
+  email: string
 
-    @IsNotEmpty()
-    @IsString()
-    password: string
+  @IsNotEmpty()
+  @IsString()
+  password: string
+}
 
-    @IsString()
-    id_token: string
+export class AuthenticatedDto {
+  @IsNotEmpty()
+  @IsString()
+  id_token: string
+
+  @IsNotEmpty()
+  @IsString()
+  refresh_token: string
 }

@@ -13,12 +13,9 @@ export class JwtConfigOptions implements JwtOptionsFactory {
       publicKey: readFileSync(
         join(__dirname, '..', 'keys', 'jwt_key.pub').toString(),
       ),
-      secretOrPrivateKey: readFileSync(
-        join(__dirname, '..', 'keys', 'jwt_key.pem').toString(),
-      ),
       signOptions: {
         algorithm: 'RS256',
-        expiresIn: '6h',
+        expiresIn: '15m',
       },
       verifyOptions: { algorithms: ['RS256'] },
     }
