@@ -19,14 +19,14 @@ export class UserService {
     private readonly userRepository: Repository<User>,
     private readonly mailService: MailService,
   ) {}
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     createUserDto.password = bcrypt.hashSync(createUserDto.password, 8)
-    this.mailService.sendConfirmationEmail(
-      createUserDto.first_name + ' ' + createUserDto.last_name,
+    const createdUser = await this.userRepository.save(createUserDto)
+    const emailResponse = await this.mailService.sendConfirmationEmail(
+      createdUser,
       '123123123',
-      createUserDto.email
     )
-    return this.userRepository.save(createUserDto)
+    return { user: createdUser, email: emailResponse }
   }
 
   findOne(email: string) {
