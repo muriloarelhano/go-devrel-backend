@@ -2,8 +2,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": [
-      "infrastructure/keys/*"
-    ]
+    "assets": ["infrastructure/keys/*", "mail/templates/**/*"]
   }
 }
