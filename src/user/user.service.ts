@@ -11,6 +11,7 @@ import { User } from './entities/user.entity'
 import * as bcrypt from 'bcrypt'
 import { ERROR_INVALID_CREDENTIALS, ERROR_USER_NOT_FOUND } from 'src/constants'
 import { MailService } from 'src/mail/mail.service'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class UserService {
@@ -18,15 +19,21 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly mailService: MailService,
+    private jwtService: JwtService,
   ) {}
   async create(createUserDto: CreateUserDto) {
     createUserDto.password = bcrypt.hashSync(createUserDto.password, 8)
     const createdUser = await this.userRepository.save(createUserDto)
     const emailResponse = await this.mailService.sendConfirmationEmail(
       createdUser,
-      '123123123',
+      this.jwtService.sign(
+        { sub: createdUser.id, email: createdUser.email },
+        {
+          expiresIn: '2d',
+        },
+      ),
     )
-    return { user: createdUser, email: emailResponse }
+    return { user: createdUser, confirmation_email: emailResponse }
   }
 
   findOne(email: string) {

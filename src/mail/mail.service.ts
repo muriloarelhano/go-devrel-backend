@@ -16,11 +16,12 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Testing Nest Mailermodule with template ✔',
+        subject: 'Por favor não responda esse e-mail',
         template: 'confirmation',
         context: {
           confirmationCode: token,
           username: user.first_name,
+          baseUrl: process.env.BASE_CALLBACK_URL,
         },
       })
     } catch (error: any) {

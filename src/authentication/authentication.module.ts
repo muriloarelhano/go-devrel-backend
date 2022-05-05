@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport'
 import { JwtStrategy } from './strategies/jwt.strategy'
 import { CacheModule } from '@nestjs/common'
 import * as redisStore from 'cache-manager-redis-store'
+import { MailModule } from 'src/mail/mail.module'
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import * as redisStore from 'cache-manager-redis-store'
       useClass: JwtConfigOptions,
     }),
     UserModule,
+    MailModule,
     CacheModule.register({
       store: redisStore,
       host: process.env.REDIS_HOST || 'localhost',

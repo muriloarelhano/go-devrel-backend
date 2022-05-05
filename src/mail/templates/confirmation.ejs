@@ -390,8 +390,13 @@
                                                                 cellspacing="0">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td> <a href="<%= locals.confirmationCode %>">Confirm
-                                                                                Your Account</a>
+                                                                        <td>
+                                                                            <form
+                                                                                action="<%= locals.baseUrl %>/auth/validate/email/<%= locals.confirmationCode %>"
+                                                                                method="POST">
+                                                                                <button>Confirmar Email</button>
+                                                                            </form>
+
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>

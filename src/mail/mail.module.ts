@@ -21,7 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
           },
         },
         defaults: {
-          from: '"Go Devrel No Reply" <noreply@devrel.com.br>',
+          from: '"Go Devrel Account" <noreply@devrel.com.br>',
         },
         preview: true,
         template: {
