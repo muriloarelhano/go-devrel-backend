@@ -2,7 +2,9 @@ import {
   IsEmail,
   IsString,
   Length,
-  IsNotEmpty
+  IsNotEmpty,
+  IsBoolean,
+  IsOptional
 } from 'class-validator'
 
 export class CreateUserDto {
@@ -10,6 +12,10 @@ export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
   email: string
+
+  @IsBoolean()
+  @IsOptional()
+  is_email_verified: boolean
 
   @IsString()
   @Length(6, 18)

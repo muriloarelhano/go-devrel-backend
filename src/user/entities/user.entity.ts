@@ -16,6 +16,9 @@ export class User {
   @Column({ nullable: false })
   email: string
 
+  @Column({ nullable: false, default: false })
+  is_email_verified: boolean
+
   @Column({ nullable: false })
   password: string
 

@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class AuthenticationDto {
   @IsNotEmpty()
@@ -19,4 +19,14 @@ export class AuthenticatedDto {
   @IsNotEmpty()
   @IsString()
   refresh_token: string
+}
+
+export class ValidationDto {
+  @IsString()
+  @IsOptional()
+  token: string
+  
+  @IsString()
+  @IsOptional()
+  phone: string
 }

@@ -10,17 +10,30 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
 import * as bcrypt from 'bcrypt'
 import { ERROR_INVALID_CREDENTIALS, ERROR_USER_NOT_FOUND } from 'src/constants'
-import { use } from 'passport'
+import { MailService } from 'src/mail/mail.service'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly mailService: MailService,
+    private jwtService: JwtService,
   ) {}
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     createUserDto.password = bcrypt.hashSync(createUserDto.password, 8)
-    return this.userRepository.save(createUserDto)
+    const createdUser = await this.userRepository.save(createUserDto)
+    const emailResponse = await this.mailService.sendConfirmationEmail(
+      createdUser,
+      this.jwtService.sign(
+        { sub: createdUser.id, email: createdUser.email },
+        {
+          expiresIn: '2d',
+        },
+      ),
+    )
+    return { user: createdUser, confirmation_email: emailResponse }
   }
 
   findOne(email: string) {
@@ -32,12 +45,12 @@ export class UserService {
   }
 
   async remove(id: string) {
-    const user = await this.userRepository.findOne(id)
+    const user = await this.userRepository.findOne({ where: { id } })
     return await this.userRepository.remove(user)
   }
 
   async resetPassword(id: string, password: string, newPassword: string) {
-    const user = await this.userRepository.findOne(id)
+    const user = await this.userRepository.findOne({ where: { id } })
     if (!user) throw new NotFoundException(ERROR_USER_NOT_FOUND)
     if (!bcrypt.compareSync(password, user.password))
       throw new BadRequestException(ERROR_INVALID_CREDENTIALS)

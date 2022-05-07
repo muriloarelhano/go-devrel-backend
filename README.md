@@ -1,6 +1,6 @@
 # Description
 
-Description...
+Go devrel é uma ferramenta para ajudar desenvolvedores a aprender sobre um modelo para governança de desenvolvedores em ecossistema de software, e recolher feedbacks para coletar informações e aprimorar o modelo.
 
 <p align="right">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="240" alt="Nest Logo" /></a>
