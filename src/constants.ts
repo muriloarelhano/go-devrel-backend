@@ -1,3 +1,8 @@
-export const ERROR_USER_NOT_FOUND = 'User not found'
-export const ERROR_INVALID_CREDENTIALS = 'Invalid credentials'
-export const ERROR_INVALID_TOKEN = 'This token is invalid'
+// Errors
+export const ERROR_USER_NOT_FOUND = 'ERROR_USER_NOT_FOUND'
+export const ERROR_INVALID_CREDENTIALS = 'ERROR_INVALID_CREDENTIALS'
+export const ERROR_INVALID_TOKEN = 'ERROR_INVALID_TOKEN'
+export const ERROR_EMAIL_NOT_FOUND = 'ERROR_EMAIL_NOT_FOUND'
+
+//SUCCESS
+export const SUCCESSFULLY_VALIDATED = 'SUCCESSFULLY_VALIDATED'
