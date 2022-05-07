@@ -6,7 +6,12 @@ import {
   Inject,
   NotFoundException,
 } from '@nestjs/common'
-import { ERROR_INVALID_CREDENTIALS, ERROR_INVALID_TOKEN } from 'src/constants'
+import {
+  ERROR_EMAIL_NOT_FOUND,
+  ERROR_INVALID_CREDENTIALS,
+  ERROR_INVALID_TOKEN,
+  SUCCESSFULLY_VALIDATED,
+} from 'src/constants'
 import { UserService } from 'src/user/user.service'
 import { AuthenticatedDto, AuthenticationDto } from './dto/authentication.dto'
 import { JwtService } from '@nestjs/jwt'
@@ -54,7 +59,7 @@ export class AuthenticationService {
 
   async resendConfirmationEmail(email: string) {
     const user = await this.userService.findOne(email)
-    if (!user) throw new NotFoundException('EMAIL_NOT_FOUND')
+    if (!user) throw new NotFoundException(ERROR_EMAIL_NOT_FOUND)
 
     return this.mailService.sendConfirmationEmail(
       user,
@@ -74,10 +79,10 @@ export class AuthenticationService {
     //@ts-ignore
     const user = await this.userService.findOne(payload.email)
 
-    if (!user) new NotFoundException(ERROR_INVALID_TOKEN)
+    if (!user) new NotFoundException(ERROR_EMAIL_NOT_FOUND)
 
     await this.userService.update(user.id, { is_email_verified: true })
-    return { status: 'SUCCESSFULLY_VALIDATED' }
+    return { status: SUCCESSFULLY_VALIDATED }
   }
 
   async refresh(body: AuthenticatedDto) {
