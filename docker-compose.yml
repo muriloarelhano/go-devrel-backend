@@ -8,7 +8,7 @@ services:
     networks:
       - devrel
 
-  backend-db:
+  postgres:
     image: postgres:latest
     ports:
       - 5432:5432
@@ -16,8 +16,18 @@ services:
       - ./temp/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: user
-      POSTGRES_USER: devrel
-      POSTGRES_PASSWORD: devrel
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    networks:
+      - devrel
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASS}
     networks:
       - devrel
 

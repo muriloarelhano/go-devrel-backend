@@ -5,12 +5,17 @@ import { TypeOrmConfigOptions } from "./infrastructure/config/typeorm.config";
 import { UserModule } from "./user/user.module";
 import { AuthenticationModule } from "./authentication/authentication.module";
 import { MailModule } from "./mail/mail.module";
-import { FormsModule } from './forms/forms.module';
+import { FormsModule } from "./forms/forms.module";
+import { MongodbTypeOrmConfigOptions } from "./infrastructure/config/mongodb.config";
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigOptions,
+    }),
+    TypeOrmModule.forRootAsync({
+      useClass: MongodbTypeOrmConfigOptions,
     }),
     AuthenticationModule,
     UserModule,

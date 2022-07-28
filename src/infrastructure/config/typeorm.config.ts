@@ -21,7 +21,7 @@ export class TypeOrmConfigOptions implements TypeOrmOptionsFactory {
       password: DB_PASS,
       database: DB_NAME,
       migrations: [`${__dirname}/../../**/*.migration{.ts,.js}`],
-      entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
+      entities: [`${__dirname}/../../user/**/*.entity{.ts,.js}`],
       synchronize: NODE_ENV == 'development' ? true : false,
     }
   }

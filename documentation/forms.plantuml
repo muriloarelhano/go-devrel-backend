@@ -1,0 +1,20 @@
+@startjson
+{
+
+    "userId": "01",
+    "stage": "sensibilizacao",
+    "formIdentifier": "plataforma_e_produtos",
+    "responses": [
+    {
+        "question": "O que?",
+        "response": "Não",
+        "comment": "outras info"
+    }
+    ,
+    {
+        "question": "O que?",
+        "response": "Não"
+    }
+    ]
+}
+@endjson
