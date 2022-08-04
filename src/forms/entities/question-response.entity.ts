@@ -1,6 +1,6 @@
 import { Column } from "typeorm";
 
-export class Question {
+export class QuestionResponse {
   @Column()
   question: string;
 

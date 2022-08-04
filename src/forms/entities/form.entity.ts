@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, Index, ObjectID, ObjectIdColumn } from "typeorm";
-import { Question } from "./question.entity";
+import { QuestionResponse } from "./question-response.entity";
 
 @Entity()
 export class Form {
   @ObjectIdColumn()
-  id: ObjectID;
+  _id: ObjectID;
 
   @Index('user_id_index')
   @Column()
@@ -16,10 +16,14 @@ export class Form {
   @Column()
   formIdentifier: string;
 
-  @Column((type) => Question)
-  responses: Question[];
+  @Column((type) => QuestionResponse)
+  responses: QuestionResponse[];
 
   @Index('created_at_index')
   @CreateDateColumn()
   createdAt: Date
+
+  constructor(partial: Partial<Form>) {
+    Object.assign(this, partial)
+  }
 }

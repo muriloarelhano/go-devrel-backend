@@ -1,7 +1,9 @@
 import {
     IsString,
     IsNotEmpty,
+    IsArray,
 } from 'class-validator'
+import { QuestionResponse } from '../entities/question-response.entity';
 
 export class CreateFormDto {
 
@@ -16,4 +18,8 @@ export class CreateFormDto {
     @IsString()
     @IsNotEmpty()
     formIdentifier: string;
+
+    @IsArray()
+    @IsNotEmpty()
+    responses: QuestionResponse[];
 }
