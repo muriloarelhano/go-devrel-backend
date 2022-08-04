@@ -1,20 +1,23 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TypeOrmConfigOptions } from "./infrastructure/config/typeorm.config";
 import { UserModule } from "./user/user.module";
 import { AuthenticationModule } from "./authentication/authentication.module";
 import { MailModule } from "./mail/mail.module";
 import { FormsModule } from "./forms/forms.module";
-import { MongodbTypeOrmConfigOptions } from "./infrastructure/config/mongodb.config";
+import { MONGODB_CONNECTION, POSTGRES_CONNECTION } from "./constants";
+import { TypeOrmConfigOptions } from "./configuration/database/typeorm.config";
+import { MongodbTypeOrmConfigOptions } from "./configuration/database/mongodb.config";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
+      name: POSTGRES_CONNECTION,
       useClass: TypeOrmConfigOptions,
     }),
     TypeOrmModule.forRootAsync({
+      name: MONGODB_CONNECTION,
       useClass: MongodbTypeOrmConfigOptions,
     }),
     AuthenticationModule,
@@ -25,4 +28,4 @@ import { MongodbTypeOrmConfigOptions } from "./infrastructure/config/mongodb.con
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

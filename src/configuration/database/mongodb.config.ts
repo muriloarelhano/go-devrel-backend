@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
+import { Form } from "src/forms/entities/form.entity";
 
 @Injectable()
 export class MongodbTypeOrmConfigOptions implements TypeOrmOptionsFactory {
@@ -28,9 +29,9 @@ export class MongodbTypeOrmConfigOptions implements TypeOrmOptionsFactory {
       database: MONGO_DB_NAME,
       synchronize: true,
       logging: true,
-      entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
+      entities: [Form],
       authSource: "admin",
-      
+
     };
   }
 }

@@ -1,14 +1,13 @@
-import { Module } from '@nestjs/common'
-import { AuthenticationService } from './authentication.service'
-import { AuthenticationController } from './authentication.controller'
-import { UserModule } from 'src/user/user.module'
+import { CacheModule, Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
-import { JwtConfigOptions } from 'src/infrastructure/config/jwt.config'
 import { PassportModule } from '@nestjs/passport'
-import { JwtStrategy } from './strategies/jwt.strategy'
-import { CacheModule } from '@nestjs/common'
 import * as redisStore from 'cache-manager-redis-store'
+import { JwtConfigOptions } from 'src/configuration/jwt.config'
 import { MailModule } from 'src/mail/mail.module'
+import { UserModule } from 'src/user/user.module'
+import { AuthenticationController } from './authentication.controller'
+import { AuthenticationService } from './authentication.service'
+import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Module({
   imports: [

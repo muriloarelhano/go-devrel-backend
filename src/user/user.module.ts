@@ -4,12 +4,13 @@ import { UserController } from './user.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { User } from './entities/user.entity'
 import { MailModule } from 'src/mail/mail.module'
-import { JwtConfigOptions } from 'src/infrastructure/config/jwt.config'
+import { JwtConfigOptions } from 'src/configuration/jwt.config'
 import { JwtModule } from '@nestjs/jwt'
+import { POSTGRES_CONNECTION } from 'src/constants'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User], POSTGRES_CONNECTION),
     JwtModule.registerAsync({
       useClass: JwtConfigOptions,
     }),
@@ -19,4 +20,4 @@ import { JwtModule } from '@nestjs/jwt'
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }

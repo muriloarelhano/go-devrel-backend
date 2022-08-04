@@ -3,8 +3,10 @@ import { Column } from "typeorm";
 export class Question {
   @Column()
   question: string;
+
   @Column()
   response: string;
+
   @Column()
   comment?: string;
 
