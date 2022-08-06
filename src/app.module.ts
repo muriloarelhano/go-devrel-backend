@@ -8,6 +8,7 @@ import { FormsModule } from "./forms/forms.module";
 import { MONGODB_CONNECTION, POSTGRES_CONNECTION } from "./constants";
 import { TypeOrmConfigOptions } from "./configuration/database/typeorm.config";
 import { MongodbTypeOrmConfigOptions } from "./configuration/database/mongodb.config";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { MongodbTypeOrmConfigOptions } from "./configuration/database/mongodb.co
     MailModule,
     FormsModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule { }

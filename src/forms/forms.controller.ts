@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, ValidationPipe } from '@nestjs/common';
 import { CreateFormDto } from './dto/create-form.dto';
 import { FindFormDto } from './dto/find-form.dto';
 import { FormsService } from './forms.service';
@@ -8,7 +8,7 @@ export class FormsController {
   constructor(private readonly formsService: FormsService) { }
 
   @Post()
-  create(@Body() createFormDto: CreateFormDto) {
+  create(@Body(new ValidationPipe()) createFormDto: CreateFormDto) {
     return this.formsService.create(createFormDto);
   }
 
