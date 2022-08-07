@@ -9,6 +9,8 @@ import { AuthenticationController } from './authentication.controller'
 import { AuthenticationService } from './authentication.service'
 import { JwtStrategy } from './strategies/jwt.strategy'
 
+const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_USER } = process.env
+
 @Module({
   imports: [
     PassportModule,
@@ -19,8 +21,10 @@ import { JwtStrategy } from './strategies/jwt.strategy'
     MailModule,
     CacheModule.register({
       store: redisStore,
-      host: process.env.REDIS_HOST || 'localhost',
-      port: process.env.REDIS_PORT || 6379,
+      host: REDIS_HOST || 'localhost',
+      port: REDIS_PORT || 6379,
+      password: REDIS_PASSWORD || "123",
+      user: REDIS_USER || 'default',
       isGlobal: true,
       ttl: 432000, // 5 days
     }),
@@ -28,4 +32,4 @@ import { JwtStrategy } from './strategies/jwt.strategy'
   controllers: [AuthenticationController],
   providers: [AuthenticationService, JwtStrategy],
 })
-export class AuthenticationModule {}
+export class AuthenticationModule { }

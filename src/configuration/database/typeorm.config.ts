@@ -7,7 +7,7 @@ export class TypeOrmConfigOptions implements TypeOrmOptionsFactory {
   createTypeOrmOptions(
     _connectionName?: string,
   ): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
-    const { DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME, NODE_ENV } =
+    const { DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME } =
       process.env
     if (!process.env.DB_USER || !process.env.DB_PASS) {
       console.log(
@@ -23,7 +23,7 @@ export class TypeOrmConfigOptions implements TypeOrmOptionsFactory {
       database: DB_NAME,
       migrations: [`${__dirname}/../../**/*.migration{.ts,.js}`],
       entities: [User],
-      synchronize: NODE_ENV == 'development' ? true : false,
+      synchronize: true
     }
   }
 }
