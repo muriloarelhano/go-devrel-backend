@@ -8,10 +8,10 @@ export class JwtConfigOptions implements JwtOptionsFactory {
   createJwtOptions(): JwtModuleOptions | Promise<JwtModuleOptions> {
     return {
       privateKey: readFileSync(
-        join(__dirname, '..', 'keys', 'jwt_key.pem').toString(),
+        join(__dirname, 'keys', 'jwt_key.pem').toString(),
       ),
       publicKey: readFileSync(
-        join(__dirname, '..', 'keys', 'jwt_key.pub').toString(),
+        join(__dirname, 'keys', 'jwt_key.pub').toString(),
       ),
       signOptions: {
         algorithm: 'RS256',

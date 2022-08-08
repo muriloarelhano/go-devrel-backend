@@ -1,22 +1,22 @@
 import {
   BadRequestException,
   Injectable,
-  NotFoundException,
+  NotFoundException
 } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
+import * as bcrypt from 'bcrypt'
+import { ERROR_INVALID_CREDENTIALS, ERROR_USER_NOT_FOUND, POSTGRES_CONNECTION } from 'src/constants'
+import { MailService } from 'src/mail/mail.service'
 import { Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
-import * as bcrypt from 'bcrypt'
-import { ERROR_INVALID_CREDENTIALS, ERROR_USER_NOT_FOUND } from 'src/constants'
-import { MailService } from 'src/mail/mail.service'
-import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
+    @InjectRepository(User, POSTGRES_CONNECTION)
     private readonly userRepository: Repository<User>,
     private readonly mailService: MailService,
     private jwtService: JwtService,
