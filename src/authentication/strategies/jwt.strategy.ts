@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           __dirname,
           '..',
           '..',
-          'infrastructure',
+          'configuration',
           'keys',
           'jwt_key.pub',
         ).toString(),
