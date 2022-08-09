@@ -32,6 +32,8 @@
     "@nestjs/platform-fastify": "^9.0.8",
     "@nestjs/typeorm": "^9.0.0",
     "@types/bcrypt": "^5.0.0",
+    "@nestjs-modules/mailer": "^1.8.1",
+    "@nestjs/schematics": "^9.0.1",
     "bcrypt": "^5.0.1",
     "cache-manager": "^4.1.0",
     "cache-manager-redis-store": "^2.0.0",
@@ -51,9 +53,7 @@
     "typeorm": "^0.3.7"
   },
   "devDependencies": {
-    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/cli": "^9.0.0",
-    "@nestjs/schematics": "^9.0.1",
     "@nestjs/testing": "^9.0.8",
     "@types/cache-manager": "^4.0.1",
     "@types/cache-manager-redis-store": "^2.0.1",
