@@ -3,7 +3,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "assets": [
-      "configuration/keys/*",
+      "configuration/keys/**/*",
       "mail/templates/**/*"
     ]
   }
