@@ -16,7 +16,9 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AllExceptionsFilter } from "../filters/generic-exception.filter";
 import { JwtAuthGuard } from "../authentication/guards/jwt.guard";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("User")
 @Controller("user")
 @UseFilters(new AllExceptionsFilter(UserController.name))
 export class UserController {

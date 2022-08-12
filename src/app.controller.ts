@@ -1,11 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Helpers")
 @Controller()
 export class AppController {
 
-    @Get('/ping')
+    @Get('/health')
     create() {
-        return 'pong'
+        return { status: 'OK' }
     }
 
 }

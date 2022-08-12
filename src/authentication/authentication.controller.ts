@@ -1,13 +1,15 @@
-import { Param, Post, ValidationPipe } from '@nestjs/common'
+import {  Param, Post, ValidationPipe } from '@nestjs/common'
 import { Controller, Get, Body, UseFilters } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { AllExceptionsFilter } from '../filters/generic-exception.filter'
 import { AuthenticationService } from './authentication.service'
 import {
-  AuthenticatedDto,
+  ReturnAuthenticatedCredentialsDto,
   AuthenticationDto,
-  ValidationDto,
+  ValidateEmailTokenDto,
 } from './dto/authentication.dto'
 
+@ApiTags("Auth")
 @Controller('auth')
 @UseFilters(new AllExceptionsFilter(AuthenticationController.name))
 export class AuthenticationController {
@@ -19,21 +21,21 @@ export class AuthenticationController {
   }
 
   @Get('logout')
-  logout(@Body(new ValidationPipe()) body: AuthenticatedDto) {
+  logout(@Body(new ValidationPipe()) body: ReturnAuthenticatedCredentialsDto) {
     return this.authenticationService.logout(body)
   }
 
   @Get('refresh')
-  refresh(@Body(new ValidationPipe()) body: AuthenticatedDto) {
+  refresh(@Body(new ValidationPipe()) body: ReturnAuthenticatedCredentialsDto) {
     return this.authenticationService.refresh(body)
   }
 
-  @Post('validate/email/:token')
-  validateEmail(@Param(new ValidationPipe()) { token }: ValidationDto) {
+  @Post('email/validate/:token')
+  validateEmail(@Param(new ValidationPipe()) { token }: ValidateEmailTokenDto) {
     return this.authenticationService.validateEmail(token)
   }
 
-  @Post('resend/email')
+  @Post('email/resend')
   resendConfirmationEmail(@Body('email') email: string) {
     return this.authenticationService.resendConfirmationEmail(email)
   }

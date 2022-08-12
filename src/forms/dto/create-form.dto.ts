@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
     IsString,
     IsNotEmpty,
@@ -9,17 +10,21 @@ export class CreateFormDto {
 
     @IsString()
     @IsNotEmpty()
+    @ApiProperty()
     userId: string;
     
     @IsString()
     @IsNotEmpty()
+    @ApiProperty()
     stage: string;
 
     @IsString()
     @IsNotEmpty()
+    @ApiProperty()
     formIdentifier: string;
 
     @IsArray()
     @IsNotEmpty()
+    @ApiProperty()
     responses: QuestionResponse[];
 }

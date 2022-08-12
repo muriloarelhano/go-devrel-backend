@@ -13,7 +13,7 @@ import {
   SUCCESSFULLY_VALIDATED,
 } from 'src/constants'
 import { UserService } from 'src/user/user.service'
-import { AuthenticatedDto, AuthenticationDto } from './dto/authentication.dto'
+import { ReturnAuthenticatedCredentialsDto, AuthenticationDto } from './dto/authentication.dto'
 import { JwtService } from '@nestjs/jwt'
 import { User } from 'src/user/entities/user.entity'
 import * as bcrypt from 'bcrypt'
@@ -22,6 +22,7 @@ import { DateTime, DurationLike } from 'luxon'
 import { Cache } from 'cache-manager'
 import { UnauthorizedException } from '@nestjs/common'
 import { MailService } from 'src/mail/mail.service'
+import { isEmpty } from 'class-validator'
 
 @Injectable()
 export class AuthenticationService {
@@ -30,11 +31,19 @@ export class AuthenticationService {
     private jwtService: JwtService,
     private readonly mailService: MailService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) { }
 
   async login(body: AuthenticationDto) {
-    const user = await this.validateUser(body.email, body.password)
+
+    let user: User
+    try {
+      user = await this.validateUser(body.email, body.password)
+    } catch (error) {
+      throw new BadRequestException(ERROR_INVALID_CREDENTIALS)
+    }
+
     if (!user) throw new BadRequestException(ERROR_INVALID_CREDENTIALS)
+
     const payload = {
       email: user.email,
       sub: user.id,
@@ -53,7 +62,7 @@ export class AuthenticationService {
     return response
   }
 
-  async logout(_body: AuthenticatedDto) {
+  async logout(_body: ReturnAuthenticatedCredentialsDto) {
     return `This action is not implemented yet`
   }
 
@@ -85,7 +94,7 @@ export class AuthenticationService {
     return { status: SUCCESSFULLY_VALIDATED }
   }
 
-  async refresh(body: AuthenticatedDto) {
+  async refresh(body: ReturnAuthenticatedCredentialsDto) {
     const isTokenValid = await this.verifyRefreshToken(body.refresh_token)
     if (!isTokenValid) throw new UnauthorizedException(ERROR_INVALID_TOKEN)
 
@@ -115,7 +124,8 @@ export class AuthenticationService {
 
   private async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userService.findOne(email)
-    if (user && bcrypt.compareSync(password, user.password)) return user
+    if (user && !isEmpty(user) && bcrypt.compareSync(password, user.password)) return user
+    else throw new UnauthorizedException(ERROR_INVALID_CREDENTIALS)
   }
 
   private generateRefreshToken(duration: DurationLike) {
