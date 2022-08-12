@@ -51,14 +51,14 @@ export class AuthenticationService {
       last_name: user.last_name,
       isEmailValidated: user.is_email_verified,
     }
-    const generatedToken = this.generateRefreshToken({ days: 5 })
+    const generatedRefreshToken = this.generateRefreshToken({ days: 5 })
 
     const response = {
       id_token: this.jwtService.sign(payload),
-      refresh_token: generatedToken.token,
+      refresh_token: generatedRefreshToken.token,
     }
 
-    await this.cacheManager.set(generatedToken.token, generatedToken.expireDate)
+    await this.cacheManager.set(generatedRefreshToken.token, generatedRefreshToken.expireDate)
     return response
   }
 
@@ -98,10 +98,10 @@ export class AuthenticationService {
     const isTokenValid = await this.verifyRefreshToken(body.refresh_token)
     if (!isTokenValid) throw new UnauthorizedException(ERROR_INVALID_TOKEN)
 
-    const generatedToken = this.generateRefreshToken({ days: 5 })
+    const generatedRefreshToken = this.generateRefreshToken({ days: 5 })
 
     await this.cacheManager.del(body.refresh_token)
-    await this.cacheManager.set(generatedToken.token, generatedToken.expireDate)
+    await this.cacheManager.set(generatedRefreshToken.token, generatedRefreshToken.expireDate)
 
     const loggedUserPayload = this.jwtService.decode(body.id_token) as any
 
@@ -116,7 +116,7 @@ export class AuthenticationService {
 
     const response = {
       id_token: this.jwtService.sign(payload),
-      refresh_token: generatedToken.token,
+      refresh_token: generatedRefreshToken.token,
     }
 
     return response

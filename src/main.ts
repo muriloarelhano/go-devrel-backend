@@ -5,8 +5,11 @@ import {
   FastifyAdapter,
   NestFastifyApplication
 } from "@nestjs/platform-fastify";
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from "./app.module";
+import { setUpSwagger } from './swagger';
+import basicAuth from '@fastify/basic-auth'
+import { ERROR_INVALID_CREDENTIALS } from './constants';
+import { UnauthorizedException } from '@nestjs/common';
 
 
 async function bootstrap() {
@@ -18,20 +21,23 @@ async function bootstrap() {
   );
 
   await app.register(compression);
+
   await app.register(helmet, {
     contentSecurityPolicy: false,
   });
 
-  const config = new DocumentBuilder()
-    .setTitle('Go Devrel Internal API')
-    .setDescription('The app internal API description')
-    .setVersion('1.0')
-    .build();
+  await app.register(basicAuth, { validate, authenticate: {realm: "internal_doc"} })
 
-  const document = SwaggerModule.createDocument(app, config);
+  function validate(username, password, req, reply, done) {
 
-  SwaggerModule.setup('api', app, document)
+    if (username === 'secretuser' && password === 'secretpassword') {
+      done()
+    } else {
+      done(new UnauthorizedException(ERROR_INVALID_CREDENTIALS))
+    }
+  }
 
+  setUpSwagger(app, app.getHttpAdapter().getInstance())
 
   await app.listen(process.env.PORT || 4000, '0.0.0.0');
 
