@@ -1,50 +1,37 @@
 import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-  Logger,
+  ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger
 } from '@nestjs/common'
-import { Request, Response } from 'express'
+import { FastifyReply, FastifyRequest } from "fastify";
 import { hostname } from 'os'
 
-@Catch()
-export class AllExceptionsFilter implements ExceptionFilter {
+@Catch(HttpException)
+export class GenericHttpExceptionsFilter implements ExceptionFilter {
   private readonly logger: Logger
   constructor(private readonly applicationContext: string) {
     this.logger = new Logger(applicationContext)
   }
-  catch(exception: any, host: ArgumentsHost): void {
+  catch(exception: HttpException, host: ArgumentsHost): void {
     // In certain situations `httpAdapter` might not be available in the
     // constructor method, thus we should resolve it here.
     const context = host.switchToHttp()
-    const response = context.getResponse<Response>()
-    const request = context.getRequest<Request>()
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR
+    const response = context.getResponse<FastifyReply>()
+    const request = context.getRequest<FastifyRequest>()
+    const status = exception.getStatus();
 
     this.logger.error(
       {
-        statusCode: exception.response ? undefined : status,
-        error: exception.response ? undefined : exception.error,
-        message: exception.response ? undefined : exception.message,
-        ...exception.response,
         path: request.url,
         method: request.method,
         host: hostname(),
+        description: exception.getResponse(),
       },
       exception.stack,
+      this.applicationContext
     )
-    response.status(status).json({
-      statusCode: exception.response ? undefined : status,
-      error: exception.response ? undefined : exception.error,
-      message: exception.response ? undefined : exception.message,
-      ...exception.response,
+    response.status(status).send({
       path: request.url,
       method: request.method,
+      description: exception.getResponse(),
     })
   }
 }

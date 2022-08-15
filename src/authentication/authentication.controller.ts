@@ -1,7 +1,7 @@
 import {  Param, Post, ValidationPipe } from '@nestjs/common'
 import { Controller, Get, Body, UseFilters } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { AllExceptionsFilter } from '../filters/generic-exception.filter'
+import { GenericHttpExceptionsFilter } from '../filters/generic-exception.filter'
 import { AuthenticationService } from './authentication.service'
 import {
   ReturnAuthenticatedCredentialsDto,
@@ -11,7 +11,7 @@ import {
 
 @ApiTags("Auth")
 @Controller('auth')
-@UseFilters(new AllExceptionsFilter(AuthenticationController.name))
+@UseFilters(new GenericHttpExceptionsFilter(AuthenticationController.name))
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
