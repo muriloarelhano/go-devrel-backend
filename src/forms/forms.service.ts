@@ -20,8 +20,8 @@ export class FormsService {
     private readonly formsRepository: Repository<Form>
   ) { }
 
-  create(createFormDto: CreateFormDto) {
-    return this.formsRepository.save(createFormDto);
+  create(id: string, createFormDto: CreateFormDto) {
+    return this.formsRepository.save({userId: id, ...createFormDto});
   }
 
   findAll(form: Partial<FindFormDto>) {

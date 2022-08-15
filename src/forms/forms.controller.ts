@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Req, UseFilters, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req, UseFilters, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 import { GenericHttpExceptionsFilter } from 'src/filters/generic-exception.filter';
@@ -14,8 +14,13 @@ export class FormsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Body(new ValidationPipe()) createFormDto: CreateFormDto) {
-    return this.formsService.create(createFormDto);
+  @UsePipes(new ValidationPipe({
+    whitelist: true,
+    forbidUnknownValues: true,
+    forbidNonWhitelisted: true
+  }))
+  create(@Body() createFormDto: CreateFormDto, @Req() req: any) {
+    return this.formsService.create(req.user.id, createFormDto);
   }
 
   @Get('admin/all')

@@ -7,12 +7,6 @@ import {
 import { QuestionResponse } from '../entities/question-response.entity';
 
 export class CreateFormDto {
-
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    userId: string;
-    
     @IsString()
     @IsNotEmpty()
     @ApiProperty()

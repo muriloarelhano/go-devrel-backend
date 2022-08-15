@@ -28,6 +28,7 @@ export class GenericHttpExceptionsFilter implements ExceptionFilter {
       exception.stack,
       this.applicationContext
     )
+    
     response.status(status).send({
       path: request.url,
       method: request.method,
