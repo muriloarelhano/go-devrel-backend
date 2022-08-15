@@ -17,12 +17,13 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { GenericHttpExceptionsFilter } from "../filters/generic-exception.filter";
 import { JwtAuthGuard } from "../authentication/guards/jwt.guard";
 import { ApiTags } from "@nestjs/swagger";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 
 @ApiTags("User")
 @Controller("user")
 @UseFilters(new GenericHttpExceptionsFilter(UserController.name))
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
   @Post()
   @UsePipes(new ValidationPipe())
   create(@Body() createUserDto: CreateUserDto) {
@@ -37,7 +38,7 @@ export class UserController {
 
   @Put()
   @UseGuards(JwtAuthGuard)
-  update(@Req() req: any, @Body() updateUserDto: UpdateUserDto) {
+  update(@Req() req: any, @Body(new ValidationPipe()) updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
   }
 
@@ -45,9 +46,9 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   resetPassword(
     @Req() req: any,
-    @Body("password") password: string,
-    @Body("newPassword") newPassword: string
+    @Body(new ValidationPipe) resetPasswordDto: ResetPasswordDto
   ) {
+    const { password, newPassword } = resetPasswordDto
     return this.userService.resetPassword(req.user.id, password, newPassword);
   }
 
