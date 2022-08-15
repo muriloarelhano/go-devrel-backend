@@ -4,21 +4,25 @@ import {
   IsString,
   Length,
   IsNotEmpty,
-  IsBoolean,
-  IsOptional
 } from 'class-validator'
 
 export class CreateUserDto {
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  first_name: string
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  last_name: string
+
   @IsString()
   @IsEmail()
   @IsNotEmpty()
   @ApiProperty()
   email: string
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty()
-  is_email_verified: boolean
 
   @IsString()
   @Length(6, 18)
@@ -31,13 +35,5 @@ export class CreateUserDto {
   @ApiProperty()
   phone: string
 
-  @IsString()
-  @IsNotEmpty()
-  first_name: string
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  last_name: string
 
 }

@@ -24,6 +24,7 @@ export const setUpSwagger = (
         .setTitle('Go Devrel Internal API')
         .setDescription('The app internal API description')
         .setVersion('1.0')
+        .addBearerAuth()
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
