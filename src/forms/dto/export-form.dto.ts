@@ -1,18 +1,18 @@
-import { IsEnum, IsNotEmpty, IsString } from "class-validator";
-
-export enum ExportFormatTypes {
-  CSV = "csv",
-}
+import { IsDateString, IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { ExportFormatTypes } from "../interfaces";
 
 export class ExportFormDto {
   @IsString()
   @IsNotEmpty()
-  readonly startDate: string;
+  @IsDateString()
+  startDate: string;
+
   @IsString()
   @IsNotEmpty()
-  readonly endDate: string;
+  @IsDateString()
+  endDate: string;
 
   @IsNotEmpty()
   @IsEnum(ExportFormatTypes)
-  readonly format: ExportFormatTypes;
+  format: ExportFormatTypes;
 }

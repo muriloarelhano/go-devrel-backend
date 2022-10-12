@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { isEmpty } from "class-validator";
-import { ObjectID, ISODate } from "mongodb";
+import { DateTime } from "luxon";
+import { ObjectID } from "mongodb";
 import {
   ERROR_ID_IS_REQUIRED,
   FORM_INVALID_ID,
@@ -14,6 +15,7 @@ import { CreateFormDto } from "./dto/create-form.dto";
 import { ExportFormDto } from "./dto/export-form.dto";
 import { FindFormDto } from "./dto/find-form.dto";
 import { Form } from "./entities/form.entity";
+import { ExportFormatTypes } from "./interfaces";
 
 @Injectable()
 export class FormsService {
@@ -31,21 +33,24 @@ export class FormsService {
     return this.formsRepository.save({ userId: id, ...createFormDto });
   }
 
-  export(id: string, exportConfiguration?: ExportFormDto) {
+  exportByDateInterval(id: string, exportConfiguration?: ExportFormDto) {
     const { endDate, startDate } = exportConfiguration;
-    if (exportConfiguration) {
-      return this.formsRepository.findBy({
-        where: {
-          userId: id,
-          createdAt: {
-            $gte: new ISODate(startDate),
-            $lt: new ISODate(endDate),
-          },
+    return this.formsRepository.findBy({
+      where: {
+        userId: id,
+        createdAt: {
+          $gte: DateTime.fromISO(startDate).toJSDate(),
+          $lt: DateTime.fromISO(endDate).toJSDate(),
         },
-      });
-    } else {
-      return this.formsRepository.findOne({ where: { userId: id } });
-    }
+      },
+      take: 10,
+    });
+  }
+
+  exportOne(id: string, formId: string, _format: ExportFormatTypes) {
+    return this.formsRepository.findOne({
+      where: { userId: id, _id: new ObjectID(formId) },
+    });
   }
 
   findAll(form: Partial<FindFormDto>) {
