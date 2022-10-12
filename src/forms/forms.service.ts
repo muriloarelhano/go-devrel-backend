@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { isEmpty } from "class-validator";
-import { ObjectID } from "mongodb";
+import { ObjectID, ISODate } from "mongodb";
 import {
   ERROR_ID_IS_REQUIRED,
   FORM_INVALID_ID,
@@ -9,8 +9,9 @@ import {
   MONGODB_CONNECTION,
   SUCCESSFULLY_DELETED,
 } from "src/constants";
-import { Repository } from "typeorm";
+import { MongoRepository } from "typeorm";
 import { CreateFormDto } from "./dto/create-form.dto";
+import { ExportFormDto } from "./dto/export-form.dto";
 import { FindFormDto } from "./dto/find-form.dto";
 import { Form } from "./entities/form.entity";
 
@@ -23,11 +24,28 @@ export class FormsService {
 
   constructor(
     @InjectRepository(Form, MONGODB_CONNECTION)
-    private readonly formsRepository: Repository<any>
+    private readonly formsRepository: MongoRepository<Form>
   ) {}
 
   create(id: string, createFormDto: CreateFormDto) {
     return this.formsRepository.save({ userId: id, ...createFormDto });
+  }
+
+  export(id: string, exportConfiguration?: ExportFormDto) {
+    const { endDate, startDate } = exportConfiguration;
+    if (exportConfiguration) {
+      return this.formsRepository.findBy({
+        where: {
+          userId: id,
+          createdAt: {
+            $gte: new ISODate(startDate),
+            $lt: new ISODate(endDate),
+          },
+        },
+      });
+    } else {
+      return this.formsRepository.findOne({ where: { userId: id } });
+    }
   }
 
   findAll(form: Partial<FindFormDto>) {
@@ -63,11 +81,11 @@ export class FormsService {
 
     if (!form) throw new BadRequestException(FORM_NOT_FOUND);
     try {
-      const response = await this.formsRepository.delete(form);
+      const response = await this.formsRepository.deleteOne(form);
       return {
         status: 200,
         message: SUCCESSFULLY_DELETED,
-        affected: response.affected,
+        deletedCount: response.deletedCount,
       };
     } catch (err) {
       throw new BadRequestException(err.message);

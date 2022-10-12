@@ -1,19 +1,17 @@
-import compression from '@fastify/compress';
+import compression from "@fastify/compress";
 import helmet from "@fastify/helmet";
 import { NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
-  NestFastifyApplication
+  NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { AppModule } from "./app.module";
-import { setUpSwagger } from './swagger';
-import basicAuth from '@fastify/basic-auth'
-import { ERROR_INVALID_CREDENTIALS } from './constants';
-import { UnauthorizedException } from '@nestjs/common';
-
+import { setUpSwagger } from "./swagger";
+import basicAuth from "@fastify/basic-auth";
+import { ERROR_INVALID_CREDENTIALS } from "./constants";
+import { UnauthorizedException } from "@nestjs/common";
 
 async function bootstrap() {
-
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
@@ -26,21 +24,22 @@ async function bootstrap() {
     contentSecurityPolicy: false,
   });
 
-  await app.register(basicAuth, { validate, authenticate: {realm: "internal_doc"} })
+  await app.register(basicAuth, {
+    validate,
+    authenticate: { realm: "internal_doc" },
+  });
 
   function validate(username, password, req, reply, done) {
-
-    if (username === 'secretuser' && password === 'secretpassword') {
-      done()
+    if (username === "secretuser" && password === "secretpassword") {
+      done();
     } else {
-      done(new UnauthorizedException(ERROR_INVALID_CREDENTIALS))
+      done(new UnauthorizedException(ERROR_INVALID_CREDENTIALS));
     }
   }
 
-  setUpSwagger(app, app.getHttpAdapter().getInstance())
+  setUpSwagger(app, app.getHttpAdapter().getInstance());
 
-  await app.listen(process.env.PORT || 4000, '0.0.0.0');
-
+  await app.listen(process.env.PORT || 4000, "0.0.0.0");
 }
 
 bootstrap();
