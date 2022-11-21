@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { isEmpty } from "class-validator";
 import { DateTime } from "luxon";
@@ -16,9 +20,13 @@ import { ExportFormDto } from "./dto/export-form.dto";
 import { FindFormDto } from "./dto/find-form.dto";
 import { Form } from "./entities/form.entity";
 import { ExportFormatTypes } from "./interfaces";
+import { Parser } from "json2csv";
+import JSON2CSVParser from "json2csv/JSON2CSVParser";
 
 @Injectable()
 export class FormsService {
+  private csvParser: JSON2CSVParser<unknown> = new Parser();
+
   findByUser(userId: string) {
     if (isEmpty(userId)) throw new BadRequestException(ERROR_ID_IS_REQUIRED);
     return this.findAll({ userId });
@@ -33,9 +41,10 @@ export class FormsService {
     return this.formsRepository.save({ userId: id, ...createFormDto });
   }
 
-  exportByDateInterval(id: string, exportConfiguration?: ExportFormDto) {
+  async exportByDateInterval(id: string, exportConfiguration?: ExportFormDto) {
     const { endDate, startDate } = exportConfiguration;
-    return this.formsRepository.findBy({
+
+    const forms = await this.formsRepository.findBy({
       where: {
         userId: id,
         createdAt: {
@@ -45,12 +54,34 @@ export class FormsService {
       },
       take: 10,
     });
+
+    if (isEmpty(forms)) throw new NotFoundException(FORM_NOT_FOUND);
+
+    switch (exportConfiguration.format) {
+      case ExportFormatTypes.CSV:
+        return this.csvParser.parse(forms);
+      case ExportFormatTypes.JSON:
+        return forms;
+      default:
+        return forms
+    }
   }
 
-  exportOne(id: string, formId: string, _format: ExportFormatTypes) {
-    return this.formsRepository.findOne({
+  async exportOne(id: string, formId: string, format: ExportFormatTypes) {
+    const form = await this.formsRepository.findOne({
       where: { userId: id, _id: new ObjectID(formId) },
     });
+
+    if (isEmpty(form)) throw new NotFoundException(FORM_NOT_FOUND);
+
+    switch (format) {
+      case ExportFormatTypes.CSV:
+        return this.csvParser.parse(form);
+      case ExportFormatTypes.JSON:
+        return form;
+      default:
+        return form;
+    }
   }
 
   findAll(form: Partial<FindFormDto>) {

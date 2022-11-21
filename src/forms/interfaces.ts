@@ -1,4 +1,4 @@
 export enum ExportFormatTypes {
-  // CSV = "CSV",
+  CSV = "CSV",
   JSON = "JSON",
 }
