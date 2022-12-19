@@ -1,7 +1,22 @@
 version: "3.9"
 
 services:
-  redis-compose:
+  app:
+    container_name: godevrelbackend
+    build:
+      context: .
+      target: development
+    ports:
+      - 4000:4000
+    command: npm run start:dev
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file: ./.env
+    networks:
+      - devrel
+
+  redis:
     image: redis:latest
     ports:
       - 6379:6379
