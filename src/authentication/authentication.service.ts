@@ -50,6 +50,7 @@ export class AuthenticationService {
       first_name: user.first_name,
       last_name: user.last_name,
       isEmailValidated: user.is_email_verified,
+      phone: user.phone
     }
     const generatedRefreshToken = this.generateRefreshToken({ days: 5 })
 

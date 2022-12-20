@@ -14,7 +14,6 @@ export class AuthenticationController {
 
   @Get('login')
   login(@Query(new ValidationPipe()) payload: AuthenticationDto) {
-    console.log(payload)
     return this.authenticationService.login(payload)
   }
 
