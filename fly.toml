@@ -1,47 +1,33 @@
-# fly.toml file generated for godevrelbackend on 2022-12-19T00:59:45-04:00
+# fly.toml file generated for godevrelbackend on 2022-12-19T23:22:27-04:00
 
 app = "godevrelbackend"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[build]
-  image = "flyio/godevrelbackend:latest"
-  build-target = "production"
-
 [env]
-  # Application
-  NAME = "go-devrel-back-end"
-  PORT = 4000
   BASE_CALLBACK_URL = "http://localhost:4000"
-
-  # Database
-  DB_NAME = "ckzqgfsy"
   DB_HOST = "motty.db.elephantsql.com"
+  DB_NAME = "ckzqgfsy"
+  DB_PASS = "jSyAchq6523vokwvRZkyrSqvfAPzI00W"
   DB_PORT = 5432
   DB_USER = "ckzqgfsy"
-  DB_PASS = "jSyAchq6523vokwvRZkyrSqvfAPzI00W"
-
-  # MongoDB
   MONGO_DB_HOST = "go-devrel-production1.p6fof.mongodb.net"
+  MONGO_DB_NAME = "forms"
+  MONGO_DB_PASS = "oTnun0TExfBqcJQx"
   MONGO_DB_PORT = 27017
   MONGO_DB_USER = "devrelAdmin"
-  MONGO_DB_PASS = "oTnun0TExfBqcJQx"
-  MONGO_DB_NAME = "forms"
-
-
-  # Cache
+  NAME = "go-devrel-back-end"
+  PORT = 4000
   REDIS_HOST = "redis-10508.c14.us-east-1-2.ec2.cloud.redislabs.com"
+  REDIS_PASSWORD = "bhyA5RXiehyOawN9D5pH0iz61ildNiF1"
   REDIS_PORT = 10508
   REDIS_USER = "default"
-  REDIS_PASSWORD = "bhyA5RXiehyOawN9D5pH0iz61ildNiF1"
-
-  # SMTP
   SMTP_HOST = "smtp.gmail.com"
+  SMTP_PASSWORD = "ozqmorctxwcadfcz"
   SMTP_PORT = 587
   SMTP_USER = "godevreldevelopment@gmail.com"
-  SMTP_PASSWORD = "ozqmorctxwcadfcz"
-  
+
 [experimental]
   allowed_public_ports = []
   auto_rollback = true

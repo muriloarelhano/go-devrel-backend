@@ -44,7 +44,7 @@ export class AuthenticationService {
 
     if (!user) throw new BadRequestException(ERROR_INVALID_CREDENTIALS)
 
-    const payload = {
+    const payload: any = {
       email: user.email,
       sub: user.id,
       first_name: user.first_name,
@@ -52,6 +52,9 @@ export class AuthenticationService {
       isEmailValidated: user.is_email_verified,
       phone: user.phone
     }
+
+    if(!isEmpty(user.birthdate)) payload.birthdate = user.birthdate
+
     const generatedRefreshToken = this.generateRefreshToken({ days: 5 })
 
     const response = {
@@ -108,12 +111,15 @@ export class AuthenticationService {
 
     const user = await this.userService.findOne(loggedUserPayload.email)
 
-    const payload = {
+    const payload: any = {
       email: user.email,
       sub: user.id,
       first_name: user.first_name,
       last_name: user.last_name,
+      phone: user.phone
     }
+
+    if(!isEmpty(user.birthdate)) payload.birthdate = user.birthdate
 
     const response = {
       id_token: this.jwtService.sign(payload),
