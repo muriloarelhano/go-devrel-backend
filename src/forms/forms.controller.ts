@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -14,14 +15,15 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { IsEnum } from "class-validator";
 import { JwtAuthGuard } from "src/authentication/guards/jwt.guard";
+import { ERROR_ID_IS_REQUIRED } from "src/constants";
 import { GenericHttpExceptionsFilter } from "src/filters/generic-exception.filter";
 import { CreateFormDto } from "./dto/create-form.dto";
 import { ExportFormDto } from "./dto/export-form.dto";
 import { FindFormDto } from "./dto/find-form.dto";
 import { FormsService } from "./forms.service";
 import { ExportFormatTypes } from "./interfaces";
+import { isEmpty } from "lodash";
 
 @ApiTags("Forms")
 @UseFilters(new GenericHttpExceptionsFilter(FormsController.name))
@@ -57,6 +59,8 @@ export class FormsController {
     @Req() req: any,
     @Query(new ValidationPipe()) params: ExportFormDto
   ) {
+    if (isEmpty(req.user.id))
+      throw new BadRequestException(ERROR_ID_IS_REQUIRED);
     return this.formsService.exportByDateInterval(req.user.id, params);
   }
 
