@@ -1,59 +1,59 @@
-# fly.toml file generated for godevrelbackend on 2022-12-19T23:22:27-04:00
-
 app = "godevrelbackend"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
+[build]
+build-target = "production"
+
 [env]
-  BASE_CALLBACK_URL = "http://localhost:4000"
-  DB_HOST = "motty.db.elephantsql.com"
-  DB_NAME = "ckzqgfsy"
-  DB_PASS = "jSyAchq6523vokwvRZkyrSqvfAPzI00W"
-  DB_PORT = 5432
-  DB_USER = "ckzqgfsy"
-  MONGO_DB_HOST = "go-devrel-production1.p6fof.mongodb.net"
-  MONGO_DB_NAME = "forms"
-  MONGO_DB_PASS = "oTnun0TExfBqcJQx"
-  MONGO_DB_PORT = 27017
-  MONGO_DB_USER = "devrelAdmin"
-  NAME = "go-devrel-back-end"
-  PORT = 4000
-  REDIS_HOST = "redis-10508.c14.us-east-1-2.ec2.cloud.redislabs.com"
-  REDIS_PASSWORD = "bhyA5RXiehyOawN9D5pH0iz61ildNiF1"
-  REDIS_PORT = 10508
-  REDIS_USER = "default"
-  SMTP_HOST = "smtp.gmail.com"
-  SMTP_PASSWORD = "ozqmorctxwcadfcz"
-  SMTP_PORT = 587
-  SMTP_USER = "godevreldevelopment@gmail.com"
+BASE_CALLBACK_URL = "http://localhost:4000"
+DB_HOST = "motty.db.elephantsql.com"
+DB_NAME = "ckzqgfsy"
+DB_PASS = "jSyAchq6523vokwvRZkyrSqvfAPzI00W"
+DB_PORT = 5432
+DB_USER = "ckzqgfsy"
+MONGO_DB_HOST = "go-devrel-production1.p6fof.mongodb.net"
+MONGO_DB_NAME = "forms"
+MONGO_DB_PASS = "oTnun0TExfBqcJQx"
+MONGO_DB_PORT = 27017
+MONGO_DB_USER = "devrelAdmin"
+NAME = "go-devrel-back-end"
+PORT = 4000
+REDIS_HOST = "redis-10508.c14.us-east-1-2.ec2.cloud.redislabs.com"
+REDIS_PASSWORD = "bhyA5RXiehyOawN9D5pH0iz61ildNiF1"
+REDIS_PORT = 10508
+REDIS_USER = "default"
+SMTP_HOST = "smtp.gmail.com"
+SMTP_PASSWORD = "ozqmorctxwcadfcz"
+SMTP_PORT = 587
+SMTP_USER = "godevreldevelopment@gmail.com"
 
 [experimental]
-  allowed_public_ports = []
-  auto_rollback = true
+auto_rollback = true
 
 [[services]]
-  http_checks = []
-  internal_port = 4000
-  processes = ["app"]
-  protocol = "tcp"
-  script_checks = []
-  [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
-    type = "connections"
+http_checks = []
+internal_port = 8080
+processes = ["app"]
+protocol = "tcp"
+script_checks = []
+[services.concurrency]
+hard_limit = 25
+soft_limit = 20
+type = "connections"
 
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = 80
+[[services.ports]]
+force_https = true
+handlers = ["http"]
+port = 80
 
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
+[[services.ports]]
+handlers = ["tls", "http"]
+port = 443
 
-  [[services.tcp_checks]]
-    grace_period = "1s"
-    interval = "15s"
-    restart_limit = 0
-    timeout = "2s"
+[[services.tcp_checks]]
+grace_period = "1s"
+interval = "15s"
+restart_limit = 0
+timeout = "2s"

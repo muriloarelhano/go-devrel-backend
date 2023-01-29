@@ -13,6 +13,10 @@ services:
       - ./:/app
       - /app/node_modules
     env_file: ./.env
+    depends_on:
+      - postgres
+      - mongodb
+      - redis
     networks:
       - devrel
 
@@ -43,6 +47,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_PASS}
+    depends_on:
+      - postgres
     networks:
       - devrel
 
