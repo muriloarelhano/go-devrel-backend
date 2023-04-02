@@ -374,9 +374,8 @@
                                     <tr>
                                         <td>
                                             <p>Olá <%= locals.username %>,</p>
-                                            <p>Muito obrigado por se cadastrar em nossa plataforma, com certeza você é
-                                                muito importe para
-                                                ajudar comunidades a melhor sua experiencia com DevRel.
+                                            <p>Muito obrigado por se cadastrar em nossa plataforma, sua participação
+                                                é muito importante para ajudar nossa comunidade.
                                             </p>
                                             <p>Precisamos apenas da sua confirmação de e-mail para evitar fraudes,
                                                 obrigado pelo seu tempo.
@@ -392,8 +391,8 @@
                                                                     <tr>
                                                                         <td>
                                                                             <form
-                                                                                action="<%= locals.baseUrl %>/auth/validate/email/<%= locals.confirmationCode %>"
-                                                                                method="POST">
+                                                                                action="<%= locals.baseUrl %>/auth/email/validate/<%= locals.confirmationCode %>"
+                                                                                method="GET">
                                                                                 <button>Confirmar Email</button>
                                                                             </form>
 
@@ -405,6 +404,10 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                            <p>Caso botão não esteja funcionando clique no link abaixo:</p>
+                                            <p>
+                                                <%= locals.baseUrl %>/auth/email/validate/<%= locals.confirmationCode %>
+                                            </p>
                                             <p>Boa sorte e esperamos te ajudar em seu caminho!</p>
                                         </td>
                                     </tr>
@@ -421,8 +424,7 @@
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td class="content-block">
-                                    <span class="apple-link">A UFMS Company - Campo Grande, MS, Brazil<a
-                                            href="https://godevrel.netlify.com">Unsubscribe</a>.
+                                    <span class="apple-link">UFMS - Campo Grande, MS, Brazil <a href="https://godevrel.netlify.com">Unsubscribe</a>.
                                 </td>
                             </tr>
                             <tr>

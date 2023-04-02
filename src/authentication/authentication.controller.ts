@@ -27,12 +27,12 @@ export class AuthenticationController {
     return this.authenticationService.refresh(payload)
   }
 
-  @Post('email/validate/:token')
+  @Get('email/validate/:token')
   validateEmail(@Body(new ValidationPipe()) { token }: ValidateEmailTokenDto) {
     return this.authenticationService.validateEmail(token)
   }
 
-  @Post('email/resend')
+  @Get('email/resend')
   resendConfirmationEmail(@Body('email') email: string) {
     return this.authenticationService.resendConfirmationEmail(email)
   }
