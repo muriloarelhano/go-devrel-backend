@@ -15,19 +15,21 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
+import { isEmpty } from "lodash";
 import { JwtAuthGuard } from "src/authentication/guards/jwt.guard";
 import { ERROR_ID_IS_REQUIRED } from "src/constants";
 import { GenericHttpExceptionsFilter } from "src/filters/generic-exception.filter";
+import { UserRoles } from "src/user/roles/role.enum";
+import { Roles } from "src/user/roles/roles.decorator";
+import { RolesGuard } from "src/user/roles/roles.guard";
 import { CreateFormDto } from "./dto/create-form.dto";
 import { ExportFormDto } from "./dto/export-form.dto";
-import { FindFormDto } from "./dto/find-form.dto";
 import { FormsService } from "./forms.service";
 import { ExportFormatTypes } from "./interfaces";
-import { isEmpty } from "lodash";
 
 @ApiTags("Forms")
 @UseFilters(new GenericHttpExceptionsFilter(FormsController.name))
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller("forms")
 export class FormsController {
   constructor(private readonly formsService: FormsService) {}
@@ -44,9 +46,10 @@ export class FormsController {
     return this.formsService.create(req.user.id, createFormDto);
   }
 
-  @Get("admin/all")
-  findAll(@Query() formDto: FindFormDto) {
-    return this.formsService.findAll(formDto);
+  @Get("admin/export")
+  @Roles(UserRoles.Admin)
+  findAll(@Query(new ValidationPipe()) params: ExportFormDto) {
+    return this.formsService.exportAllByDateInterval(params);
   }
 
   @Get()
