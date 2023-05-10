@@ -23,7 +23,7 @@ export class Form {
   @Column()
   formIdentifier: string;
 
-  @Column((type) => QuestionResponse)
+  @Column()
   responses: QuestionResponse;
 
   @Index("created_at_index")

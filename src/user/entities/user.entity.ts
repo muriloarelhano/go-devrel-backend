@@ -6,6 +6,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from "typeorm";
+import { UserRoles } from "../roles/role.enum";
 
 @Entity({ name: "user" })
 @Unique(["phone", "email"])
@@ -15,6 +16,9 @@ export class User {
 
   @Column({ nullable: false })
   email: string;
+
+  @Column({ nullable: false, default: UserRoles.User })
+  role: UserRoles;
 
   @Column({ nullable: false, default: false })
   is_email_verified: boolean;
