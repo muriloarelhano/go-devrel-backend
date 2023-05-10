@@ -26,6 +26,7 @@ import { CreateFormDto } from "./dto/create-form.dto";
 import { ExportFormDto } from "./dto/export-form.dto";
 import { FormsService } from "./forms.service";
 import { ExportFormatTypes } from "./interfaces";
+import { ExportAllFormsDto } from "./dto/export-all-forms.dto";
 
 @ApiTags("Forms")
 @UseFilters(new GenericHttpExceptionsFilter(FormsController.name))
@@ -48,7 +49,7 @@ export class FormsController {
 
   @Get("admin/export")
   @Roles(UserRoles.Admin)
-  findAll(@Query(new ValidationPipe()) params: ExportFormDto) {
+  findAll(@Query(new ValidationPipe()) params: ExportAllFormsDto) {
     return this.formsService.exportAllByDateInterval(params);
   }
 

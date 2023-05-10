@@ -22,6 +22,7 @@ import { Form } from "./entities/form.entity";
 import { ExportFormatTypes } from "./interfaces";
 import { Parser } from "json2csv";
 import JSON2CSVParser from "json2csv/JSON2CSVParser";
+import { ExportAllFormsDto } from "./dto/export-all-forms.dto";
 
 @Injectable()
 export class FormsService {
@@ -65,7 +66,7 @@ export class FormsService {
         return forms;
     }
   }
-  async exportAllByDateInterval(exportConfiguration?: ExportFormDto) {
+  async exportAllByDateInterval(exportConfiguration?: ExportAllFormsDto) {
     const { endDate, startDate } = exportConfiguration;
 
     const forms = await this.formsRepository.findBy({
@@ -79,14 +80,7 @@ export class FormsService {
     });
 
     if (isEmpty(forms)) throw new NotFoundException(FORM_NOT_FOUND);
-    switch (exportConfiguration.format) {
-      case ExportFormatTypes.CSV:
-        return this.csvParser.parse(forms);
-      case ExportFormatTypes.JSON:
-        return forms;
-      default:
-        return forms;
-    }
+    return forms;
   }
 
   async exportOne(id: string, formId: string, format: ExportFormatTypes) {
