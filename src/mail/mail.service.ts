@@ -1,6 +1,7 @@
-import { MailerService } from '@nestjs-modules/mailer'
-import { Injectable } from '@nestjs/common'
-import { User } from 'src/user/entities/user.entity'
+import { MailerService } from "@nestjs-modules/mailer";
+import { Injectable } from "@nestjs/common";
+import { stringify } from "querystring";
+import { User } from "src/user/entities/user.entity";
 
 @Injectable()
 export class MailService {
@@ -16,18 +17,18 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Por favor não responda esse e-mail',
-        template: 'confirmation',
+        subject: "Por favor não responda esse e-mail",
+        template: "confirmation",
         context: {
-          confirmationCode: token,
+          confirmationCode: stringify({ token }),
           username: user.first_name,
           baseUrl: process.env.BASE_CALLBACK_URL,
         },
-      })
+      });
     } catch (error: any) {
-      console.log(error)
-      return { status: 'ERROR', message: 'EMAIL_REJECTED' }
+      console.log(error);
+      return { status: "ERROR", message: "EMAIL_REJECTED" };
     }
-    return { status: 'OK', message: 'EMAIL_SUCCESSFULLY_SENDED' }
+    return { status: "OK", message: "EMAIL_SUCCESSFULLY_SENDED" };
   }
 }

@@ -41,7 +41,7 @@ export class UserService {
   }
 
   findOne(email: string) {
-    return this.userRepository.findOne({ where: { email: email } });
+    return this.userRepository.findOneBy({ email });
   }
 
   findManyByIds(ids: string[]) {

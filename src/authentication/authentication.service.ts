@@ -1,31 +1,31 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   BadRequestException,
-  Injectable,
   CACHE_MANAGER,
   Inject,
+  Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcrypt";
+import { Cache } from "cache-manager";
+import { isEmpty } from "class-validator";
+import * as crypto from "crypto";
+import { DateTime, DurationLike } from "luxon";
 import {
   ERROR_EMAIL_NOT_FOUND,
   ERROR_INVALID_CREDENTIALS,
   ERROR_INVALID_TOKEN,
   SUCCESSFULLY_VALIDATED,
 } from "src/constants";
+import { MailService } from "src/mail/mail.service";
+import { User } from "src/user/entities/user.entity";
 import { UserService } from "src/user/user.service";
 import {
-  ReturnAuthenticatedCredentialsDto,
   AuthenticationDto,
+  ReturnAuthenticatedCredentialsDto,
 } from "./dto/authentication.dto";
-import { JwtService } from "@nestjs/jwt";
-import { User } from "src/user/entities/user.entity";
-import * as bcrypt from "bcrypt";
-import * as crypto from "crypto";
-import { DateTime, DurationLike } from "luxon";
-import { Cache } from "cache-manager";
-import { UnauthorizedException } from "@nestjs/common";
-import { MailService } from "src/mail/mail.service";
-import { isEmpty } from "class-validator";
 
 @Injectable()
 export class AuthenticationService {
