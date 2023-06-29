@@ -26,7 +26,9 @@ import { ExportAllFormsDto } from "./dto/export-all-forms.dto";
 
 @Injectable()
 export class FormsService {
-  private csvParser: JSON2CSVParser<unknown> = new Parser();
+  private csvParser: JSON2CSVParser<unknown> = new Parser({
+    delimiter: ';'
+  });
 
   findByUser(userId: string) {
     if (isEmpty(userId)) throw new BadRequestException(ERROR_ID_IS_REQUIRED);
