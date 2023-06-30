@@ -1,10 +1,10 @@
-FROM node:alpine as development
+FROM node:lts-alpine as development
 
 WORKDIR /app
 COPY . .
 RUN npm install
 
-FROM node:alpine as production
+FROM node:lts-alpine as production
 
 WORKDIR /app
 COPY . .

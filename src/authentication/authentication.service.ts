@@ -21,11 +21,23 @@ import {
 } from "src/constants";
 import { MailService } from "src/mail/mail.service";
 import { User } from "src/user/entities/user.entity";
+import { UserRoles } from "src/user/roles/role.enum";
 import { UserService } from "src/user/user.service";
 import {
   AuthenticationDto,
   ReturnAuthenticatedCredentialsDto,
 } from "./dto/authentication.dto";
+
+interface LoginResponsePayload {
+  email: string;
+  sub: string;
+  first_name: string;
+  last_name: string;
+  isEmailValidated: boolean;
+  phone: string;
+  role: UserRoles;
+  birthdate?: string | Date;
+}
 
 @Injectable()
 export class AuthenticationService {
@@ -36,7 +48,7 @@ export class AuthenticationService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
-  private makeTokenPayload(user: User) {
+  private makeTokenPayload(user: User): LoginResponsePayload {
     return {
       email: user.email,
       sub: user.id,
@@ -58,22 +70,21 @@ export class AuthenticationService {
 
     if (!user) throw new BadRequestException(ERROR_INVALID_CREDENTIALS);
 
-    const payload: any = this.makeTokenPayload(user);
+    const payload = this.makeTokenPayload(user);
 
     if (!isEmpty(user.birthdate)) payload.birthdate = user.birthdate;
 
     const generatedRefreshToken = this.generateRefreshToken({ days: 5 });
 
-    const response = {
-      id_token: this.jwtService.sign(payload),
-      refresh_token: generatedRefreshToken.token,
-    };
-
     await this.cacheManager.set(
       generatedRefreshToken.token,
       generatedRefreshToken.expireDate
     );
-    return response;
+
+    return {
+      id_token: await this.jwtService.signAsync(payload),
+      refresh_token: generatedRefreshToken.token,
+    };
   }
 
   async logout(_body: ReturnAuthenticatedCredentialsDto) {
@@ -109,8 +120,9 @@ export class AuthenticationService {
   }
 
   async refresh(body: ReturnAuthenticatedCredentialsDto) {
-    const isTokenValid = await this.verifyRefreshToken(body.refresh_token);
-    if (!isTokenValid) throw new UnauthorizedException(ERROR_INVALID_TOKEN);
+    if (!(await this.verifyRefreshToken(body.refresh_token))) {
+      throw new UnauthorizedException(ERROR_INVALID_TOKEN);
+    }
 
     const generatedRefreshToken = this.generateRefreshToken({ days: 5 });
 
@@ -151,10 +163,17 @@ export class AuthenticationService {
   }
 
   private async verifyRefreshToken(payloadToken: string): Promise<boolean> {
-    const response: any = await this.cacheManager.get<any>(payloadToken);
-    if (!response) return false;
-    if (DateTime.fromISO(response).toMillis() < DateTime.now().toMillis())
+    const response: any = await this.cacheManager.get(payloadToken);
+    if (!response) {
       return false;
+    }
+    try {
+      if (DateTime.fromISO(response).toMillis() < DateTime.now().toMillis()) {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
     return true;
   }
 }
